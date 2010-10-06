@@ -12,7 +12,7 @@ doesn't work in IE.
 Examples
 --------
 
-Default will [append] the image you drop onto the drop target
+Default will append the image you drop onto the drop target
 
     $(document).ready(function(){
         $("#drop-target").imgDrop();
@@ -25,3 +25,5 @@ Default Options
             $(img).appendTo(dropTarget);
         });
     });
+
+[DEMO](http://www.snatchev.com/jquery.imgDrop.js/)
