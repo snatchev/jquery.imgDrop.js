@@ -3,12 +3,7 @@
   <head>
     <title>Drag &amp; Drop Test</title>
     <script src='scripts/jquery.js' type='text/javascript'></script>
-    <style type="text/css">
-      [draggable=true] {
-        -webkit-user-drag: element;
-        -webkit-user-select: none;
-        -moz-user-select: none;}
-    </style>
+    <script src='scripts/jquery.imgDrop.js' type='text/javascript'></script>
     <style type='text/css'>
       /*<![CDATA[*/
         #drop-target {
@@ -20,50 +15,9 @@
       /*]]>*/
     </style>
     <script type='text/javascript'>
-      //from: https://developer.mozilla.org/en/Using_files_from_web_applications
-      function handleFiles(files) {
-        for (var i = 0; i < files.length; i++) {
-          var file = files[i];
-          var imageType = /image.*/;
-          
-          if (!file.type.match(imageType)) {
-            continue;
-          }
-          
-          var img = document.createElement("img");
-          img.file = file;
-          document.getElementById("drop-target").appendChild(img);
-          
-          var reader = new FileReader();
-          reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
-          reader.readAsDataURL(file);
-        }
-      }
       $(document).ready(function(){
-        $("#drop-target")
-          // Tells the browser that we *can* drop on this target
-          .bind('dragover dragenter', cancel)
-          .bind('drop', function(event){
-
-            //jQuery normalizes the events. dataTransfer is not in the list.
-            var dataTransfer = event.originalEvent.dataTransfer;
-            if(dataTransfer){
-              handleFiles(dataTransfer.files);
-            }
-            //prevent the browser from opening the file
-            if(event.preventDefault){
-              event.preventDefault();
-            }
-            return false;
-        });
+        $("#drop-target").imgDrop();
       });
-
-      function cancel(event) {
-        if (event.preventDefault) {
-          event.preventDefault();
-        }
-        return false;
-      }
       //]]>
     </script>
   </head>
