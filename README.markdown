@@ -18,12 +18,10 @@ Default will [append] the image you drop onto the drop target
         $("#drop-target").imgDrop();
     });
 
-Options
+Default Options
 
     $(document).ready(function(){
-        $("#drop-target").imgDrop({
-            imageHandler: function(img, dropTarget){
-                $(img).appendTo("#popup");
-            }
+        $("#drop-target").imgDrop(function(img, dropTarget){
+            $(img).appendTo(dropTarget);
         });
     });

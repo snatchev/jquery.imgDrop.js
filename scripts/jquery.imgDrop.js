@@ -23,21 +23,27 @@ jQuery(function() {
 
       // settings
       var settings = new Object;
-      settings.imageHandler = function(file, dropTarget){
-          //this was taken from mozilla docs.
-          //it looks like crap, but i haven't managed to untangle it. not worth it right now
-          //from: https://developer.mozilla.org/en/Using_files_from_web_applications
-          var img = document.createElement("img");
-          img.file = file;
-          dropTarget.append(img);
-          
-          var reader = new FileReader();
-          reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
-          reader.readAsDataURL(file);
-        }
+      settings.imageHandler = function(file){
+        //this was taken from mozilla docs.
+        //it looks like crap, but i haven't managed to untangle it. not worth it right now
+        //from: https://developer.mozilla.org/en/Using_files_from_web_applications
+        var img = document.createElement("img");
+        img.file = file;
+
+        var reader = new FileReader();
+        reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
+        reader.readAsDataURL(file);
+        return $(img);
+      },
+      settings.afterDrop = function(element, dropTarget){
+        (element).appendTo(dropTarget);
+      },
       settings.accepts = {'image': settings.imageHandler};
 
-      if(options) {
+      if(typeof options == 'function') {
+        settings.afterDrop = options;
+      }
+      if(typeof options == 'Object'){
         $.extend(settings, options);
       }
 
@@ -80,7 +86,7 @@ jQuery(function() {
             continue;
           }
 
-          handler(file, self);
+          settings.afterDrop($(handler(file)), self);
         }
         return false;
       });
