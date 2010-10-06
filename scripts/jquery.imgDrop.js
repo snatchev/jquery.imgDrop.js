@@ -24,19 +24,23 @@ jQuery(function() {
       // settings
       var settings = new Object;
       settings.imageHandler = function(file){
-        //this was taken from mozilla docs.
-        //it looks like crap, but i haven't managed to untangle it. not worth it right now
-        //from: https://developer.mozilla.org/en/Using_files_from_web_applications
-        var img = document.createElement("img");
-        img.file = file;
 
-        var reader = new FileReader();
-        reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
-        reader.readAsDataURL(file);
-        return $(img);
+        self.reader = new FileReader();
+        var img = $('<img/>');
+        self.reader.onload = function(event){
+          img.attr('src', event.target.result);
+        };
+        self.reader.readAsDataURL(file);
+
+        //wait until it's finished loading before passing it off to the callback.
+        //I'm not crazy about this.
+        while(self.reader.readyState == self.reader.LOADING){
+          $.noop()
+        };
+        return img;
       },
       settings.afterDrop = function(element, dropTarget){
-        (element).appendTo(dropTarget);
+        $(element).appendTo(dropTarget);
       },
       settings.accepts = {'image': settings.imageHandler};
 
@@ -85,8 +89,10 @@ jQuery(function() {
           if(!handler) {
             continue;
           }
+          var element = $(handler(file));
 
-          settings.afterDrop($(handler(file)), self);
+          //block until the reader is finished, sorry but i need to ensure I have that data string. I don't know what the callback will do.
+          settings.afterDrop(element, self);
         }
         return false;
       });
