@@ -30,18 +30,39 @@ jQuery(function() {
         self.reader.onload = function(event){
           img.attr('src', event.target.result);
         };
+
+
+        //since we are blocking the read, have a before and after callback
+        settings.load(self);
+
         self.reader.readAsDataURL(file);
 
-        //wait until it's finished loading before passing it off to the callback.
-        //I'm not crazy about this.
         while(self.reader.readyState == self.reader.LOADING){
-          $.noop()
+           function(){};
         };
+
+        if(self.reader.error){
+          settings.loadError(self.reader.error, self);
+        }
+        else {
+          settings.loadEnd(self);
+        }
+
         return img;
-      },
+      }
+      settings.load = function(dropTarget){
+        //nothing
+      }
+      settings.loadError = function(errorMessage, dropTarget){
+        //nothing
+      }
+      settings.loadEnd = function(dropTarget){
+        //nothing
+      }
       settings.afterDrop = function(element, dropTarget){
         $(element).appendTo(dropTarget);
-      },
+      }
+
       settings.accepts = {'image': settings.imageHandler};
 
       if(typeof options == 'function') {

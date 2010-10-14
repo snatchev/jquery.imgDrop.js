@@ -31,6 +31,12 @@
         $("#append").imgDrop(function(img, dropTarget){
           $("<div>").append(img).appendTo('body');
         });
+        $("#loading-callbacks").imgDrop(
+          {load: function(dropTarget){
+                   $(dropTarget).text("loading...");
+                 },
+           loadEnd: function(dropTarget){
+        );
       });
       //]]>
     </script>
@@ -56,6 +62,16 @@ $("#append").imgDrop(function(img, dropTarget){
 });
         </pre>
       </div>
+
+      <div id="loading-callbacks" class="drop-target">
+        <p>Loading Callbacks</p>
+        <pre>
+$("#append").imgDrop(function(img, dropTarget){
+  $("&lt;div&gt;").append(img).appendTo('body');
+});
+        </pre>
+      </div>
+
     </div>
   </body>
 </html>
