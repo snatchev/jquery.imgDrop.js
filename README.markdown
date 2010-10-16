@@ -26,4 +26,19 @@ Default Options
         });
     });
 
+Setting certain callbacks
+
+    $("#loading-callbacks").imgDrop({
+      drop: function(img, dropTarget){
+        $(img).css('float', 'left').appendTo(dropTarget);
+      },
+      load: function(dropTarget){
+        $(dropTarget).append('loading...<br/>');
+      },
+      loadEnd: function(state, dropTarget){
+        $(dropTarget).append('loaded, ' + state);
+      }
+    });
+
+
 [DEMO](http://www.snatchev.com/jquery.imgDrop.js/)
