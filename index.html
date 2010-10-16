@@ -9,7 +9,7 @@
         iframe {
           width: 600px;
           height: 600px;
-          float: left;
+          float: right;
           margin: 0px 24px;
         }
         .drop-target {
@@ -31,12 +31,17 @@
         $("#append").imgDrop(function(img, dropTarget){
           $("<div>").append(img).appendTo('body');
         });
-        $("#loading-callbacks").imgDrop(
-          {load: function(dropTarget){
-                   $(dropTarget).text("loading...");
-                 },
-           loadEnd: function(dropTarget){
-        );
+        $("#loading-callbacks").imgDrop({
+          drop: function(img, dropTarget){
+            $(img).css('float', 'left').appendTo(dropTarget);
+          },
+          load: function(dropTarget){
+            $(dropTarget).append('loading...<br/>');
+          },
+          loadEnd: function(state, dropTarget){
+            $(dropTarget).append('loaded, ' + state);
+          }
+        });
       });
       //]]>
     </script>
@@ -66,9 +71,18 @@ $("#append").imgDrop(function(img, dropTarget){
       <div id="loading-callbacks" class="drop-target">
         <p>Loading Callbacks</p>
         <pre>
-$("#append").imgDrop(function(img, dropTarget){
-  $("&lt;div&gt;").append(img).appendTo('body');
+$("#loading-callbacks").imgDrop({
+  drop: function(img, dropTarget){
+    $(img).css('float', 'left').appendTo(dropTarget);
+  },
+  load: function(dropTarget){
+    $(dropTarget).append('loading...');
+  },
+  loadEnd: function(state, dropTarget){
+    $(dropTarget).append('loaded, ' + state);
+  }
 });
+
         </pre>
       </div>
 
