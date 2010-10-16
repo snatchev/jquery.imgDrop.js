@@ -31,23 +31,12 @@ jQuery(function() {
           img.attr('src', event.target.result);
         };
 
-
-        //since we are blocking the read, have a before and after callback
-        settings.load(self);
-
         self.reader.readAsDataURL(file);
-
-        while(self.reader.readyState == self.reader.LOADING){
-           function(){};
-        };
-
-        if(self.reader.error){
-          settings.loadError(self.reader.error, self);
+        if(settings.blocking == true){
+          while(self.reader.readyState == self.reader.LOADING){
+            true;
+          }
         }
-        else {
-          settings.loadEnd(self);
-        }
-
         return img;
       }
       settings.load = function(dropTarget){
@@ -62,6 +51,8 @@ jQuery(function() {
       settings.afterDrop = function(element, dropTarget){
         $(element).appendTo(dropTarget);
       }
+
+      settings.blocking = false;
 
       settings.accepts = {'image': settings.imageHandler};
 
