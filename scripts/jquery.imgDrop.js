@@ -68,7 +68,7 @@ jQuery(function() {
       if(typeof options == 'function') {
         settings.afterDrop = options;
       }
-      if(typeof options == 'Object'){
+      if(typeof options == 'object'){
         $.extend(settings, options);
       }
 
