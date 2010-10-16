@@ -25,8 +25,9 @@ jQuery(function() {
       var settings = new Object;
       settings.imageHandler = function(file){
 
-        self.reader = new FileReader();
         var img = $('<img/>');
+
+        //set up the events
         self.reader.onload = function(event){
           img.attr('src', event.target.result);
         };
@@ -45,10 +46,10 @@ jQuery(function() {
       settings.loadError = function(errorMessage, dropTarget){
         //nothing
       }
-      settings.loadEnd = function(dropTarget){
+      settings.loadEnd = function(state, dropTarget){
         //nothing
       }
-      settings.afterDrop = function(element, dropTarget){
+      settings.drop = function(element, dropTarget){
         $(element).appendTo(dropTarget);
       }
 
@@ -56,12 +57,17 @@ jQuery(function() {
 
       settings.accepts = {'image': settings.imageHandler};
 
+
       if(typeof options == 'function') {
-        settings.afterDrop = options;
+        settings.drop = options;
       }
       if(typeof options == 'object'){
         $.extend(settings, options);
       }
+
+      self.reader = new FileReader();
+      self.reader.onloadstart = function(){settings.load(self);}
+      self.reader.onloadend =   function(){settings.loadEnd(self.reader.readyState, self);}
 
       // Tells the browser that we *can* drop on this target
       self.bind('dragover dragenter', function(event){
@@ -103,8 +109,7 @@ jQuery(function() {
           }
           var element = $(handler(file));
 
-          //block until the reader is finished, sorry but i need to ensure I have that data string. I don't know what the callback will do.
-          settings.afterDrop(element, self);
+          settings.drop(element, self);
         }
         return false;
       });
